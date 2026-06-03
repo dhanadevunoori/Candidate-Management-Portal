@@ -25,4 +25,8 @@ yarn-error.log*
 backend/node_modules/
 frontend/node_modules/
 backend/.env
+frontend/.env  
+**/node_modules/
+backend/.env
 frontend/.env
+.DS_Store
