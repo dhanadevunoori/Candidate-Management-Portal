@@ -2,7 +2,9 @@
 
 A full-stack MERN web application for managing job candidates — JWT-secured admin login, full CRUD, real-time dashboard stats, route guards, and persistent session recovery.
 
-> **Stack:** React 19 · Node.js · Express 5 · MongoDB · Mongoose · JWT · Tailwind CSS
+> **Stack:** React 19 (Create React App) · Node.js · Express 5 · MongoDB · Mongoose · JWT · Tailwind CSS
+>
+> Co-built collaboratively. See [My Contributions](#-my-contributions) for the parts I personally designed and implemented.
 
 ---
 
@@ -12,6 +14,8 @@ A full-stack MERN web application for managing job candidates — JWT-secured ad
 |---|---|
 | Email | `admin@hyreai.com` |
 | Password | `Admin123` |
+
+> ⚠️ **Current auth status:** This demo login is currently a single hardcoded credential pair checked directly in the backend route — it is **not** yet hashed with bcrypt or backed by a database user record. This is a known, deliberate scope decision (see [Future Improvements](#-possible-future-improvements)) made to prioritize the candidate pipeline and route-guarding logic first. `bcryptjs` is present in `node_modules` as a transitive dependency of other packages but is not currently invoked by the application's own auth code.
 
 ---
 
@@ -39,7 +43,7 @@ A full-stack MERN web application for managing job candidates — JWT-secured ad
 |---|---|---|
 | Node.js | 18+ | Runtime |
 | Express.js | ^5.2.1 | REST API server |
-| MongoDB | Atlas / local | Database |
+| MongoDB | Atlas / local | Database (candidate records only — admin credentials are not yet DB-backed) |
 | Mongoose | ^9.6.3 | ODM & schema validation |
 | jsonwebtoken | ^9.0.3 | JWT sign & verify (8h expiry) |
 | dotenv | ^17.4.2 | Environment config |
@@ -49,6 +53,7 @@ A full-stack MERN web application for managing job candidates — JWT-secured ad
 | Technology | Version | Purpose |
 |---|---|---|
 | React | ^19.2.7 | UI framework |
+| Create React App (react-scripts) | 5.0.1 | Build tooling — **note:** this project uses CRA, not Vite |
 | React Router DOM | ^7.16.0 | Client-side routing + route guards |
 | Axios | ^1.16.1 | HTTP client with request & response interceptors |
 | Tailwind CSS | ^3.4.1 | Utility-first styling (devDependency) |
@@ -67,7 +72,7 @@ Candidate-Management-Portal/
 │   ├── models/
 │   │   └── Candidate.js       # Mongoose schema with timestamps
 │   ├── routes/
-│   │   ├── auth.js            # POST /api/auth/login
+│   │   ├── auth.js            # POST /api/auth/login — hardcoded credential check, see note above
 │   │   └── candidates.js      # GET, POST, PUT, DELETE /api/candidates
 │   └── server.js              # Express app + MongoDB connection
 │
@@ -93,7 +98,7 @@ Candidate-Management-Portal/
 
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| `POST` | `/api/auth/login` | ❌ | Admin login — returns JWT (8h) |
+| `POST` | `/api/auth/login` | ❌ | Admin login — returns JWT (8h). Checks credentials against a hardcoded pair in source. |
 | `GET` | `/api/candidates` | ✅ | All candidates, sorted newest first |
 | `GET` | `/api/candidates/:id` | ✅ | Single candidate by ID |
 | `POST` | `/api/candidates` | ✅ | Add candidate (checks duplicate email) |
@@ -165,7 +170,7 @@ App runs at `http://localhost:3000`
 
 ## 🔮 Possible Future Improvements
 
-- [ ] Implement bcrypt password hashing for admin credentials
+- [ ] Implement bcrypt password hashing for admin credentials, backed by a real `Admin`/`User` collection instead of a hardcoded pair in source
 - [ ] Resume / CV file upload per candidate
 - [ ] Pagination for large candidate lists
 - [ ] Export candidates to CSV / Excel
@@ -174,9 +179,24 @@ App runs at `http://localhost:3000`
 
 ---
 
+## 👩‍💻 My Contributions
+
+This project was built collaboratively. Here's what I ([@dhanadevunoori](https://github.com/dhanadevunoori)) specifically designed and implemented:
+
+- **JWT Authentication Flow** — Login logic, 8-hour token issuance, `AuthContext` persistence, and Axios request/response interceptors
+- **Route Guarding** — `PrivateRoute` and `PublicRoute` components with automatic redirect on 401
+- **Candidate CRUD** — Backend routes and Mongoose schema for the candidate pipeline (Applied → Shortlisted → Rejected)
+- **Search & Filter UI** — Dashboard search-by-name/email and status filtering
+- **Modal Components** — `CandidateModal` (add/edit with validation), `ViewModal`, and `DeleteModal`
+- **Toast Notifications** — Integrated `react-hot-toast` for real-time CRUD feedback
+
+> Collaborated with a co-developer on initial project scaffolding and shared backend setup.
+
+---
+
 ## 👩‍💻 Author
 
-**Dhanalaxmi Devunoori**  
+**Dhanalaxmi Devunoori**
 📧 dhanadevunoori@gmail.com · 📍 Hyderabad · Hybrid / Remote
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/dhanadevunoori-b295a9293)
